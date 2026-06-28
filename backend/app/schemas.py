@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class CategoriaBase(BaseModel):
@@ -60,6 +60,6 @@ class TarefaUpdate(BaseModel):
 class TarefaResponse(TarefaBase):
     id: int
     categoria: CategoriaResponse
-    tags: list[TagResponse] = []
+    tags: list[TagResponse] = Field(default_factory=list)
 
     model_config = ConfigDict(from_attributes=True)

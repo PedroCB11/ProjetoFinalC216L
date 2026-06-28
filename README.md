@@ -95,6 +95,16 @@ Servicos planejados:
 - Documentacao da API: http://localhost:8000/docs
 - PostgreSQL: localhost:5432
 
+## Como executar os testes
+
+Execute:
+
+```bash
+pytest
+```
+
+Os testes usam SQLite em memoria para validar as rotas principais do backend sem depender do PostgreSQL local.
+
 ## Requisitos do projeto
 
 - Frontend com pelo menos 3 telas
