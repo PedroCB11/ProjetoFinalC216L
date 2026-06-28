@@ -18,16 +18,39 @@ O sistema permite cadastrar tarefas de estudo, organizar cada tarefa em uma cate
 
 ```text
 .
-├── backend/
-│   └── app/
-├── database/
-├── docs/
-├── frontend/
-│   ├── static/
-│   └── templates/
-├── docker-compose.yml
-└── README.md
+|-- backend/
+|   |-- app/
+|   |   |-- database.py
+|   |   |-- main.py
+|   |   `-- models.py
+|   |-- Dockerfile
+|   `-- requirements.txt
+|-- database/
+|   `-- schema.sql
+|-- docs/
+|-- frontend/
+|   |-- static/
+|   |-- templates/
+|   |-- Dockerfile
+|   |-- app.py
+|   `-- requirements.txt
+|-- docker-compose.yml
+`-- README.md
 ```
+
+## Modelo do banco
+
+Tabelas iniciais:
+
+- `categorias`: categorias das tarefas de estudo.
+- `tarefas`: tarefas cadastradas pelo usuario.
+- `tags`: marcadores reutilizaveis para classificar tarefas.
+- `tarefa_tags`: tabela associativa da relacao N:M entre tarefas e tags.
+
+Relacoes:
+
+- Uma categoria possui varias tarefas (`1:N`).
+- Uma tarefa pode possuir varias tags e uma tag pode estar em varias tarefas (`N:M`).
 
 ## Como executar
 
