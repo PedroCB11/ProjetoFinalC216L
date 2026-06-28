@@ -1,0 +1,47 @@
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: estudos_database
+    environment:
+      POSTGRES_DB: estudos_db
+      POSTGRES_USER: estudos_user
+      POSTGRES_PASSWORD: estudos_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U estudos_user -d estudos_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    container_name: estudos_backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://estudos_user:estudos_password@database:5432/estudos_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: estudos_frontend
+    environment:
+      API_BASE_URL: http://backend:8000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+
+volumes:
+  postgres_data:
