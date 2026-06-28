@@ -29,6 +29,13 @@ def validar_categoria(categoria_id: int, db: Session):
     return categoria
 
 
+def buscar_tag_ou_erro(tag_id: int, db: Session):
+    tag = db.get(models.Tag, tag_id)
+    if tag is None:
+        raise HTTPException(status_code=404, detail="Tag nao encontrada")
+    return tag
+
+
 @router.get("/", response_model=list[schemas.TarefaResponse])
 def listar_tarefas(db: Session = Depends(get_db)):
     return (
@@ -86,3 +93,37 @@ def excluir_tarefa(tarefa_id: int, db: Session = Depends(get_db)):
     db.delete(tarefa)
     db.commit()
     return None
+
+
+@router.post("/{tarefa_id}/tags/{tag_id}", response_model=schemas.TarefaResponse)
+def adicionar_tag_na_tarefa(
+    tarefa_id: int,
+    tag_id: int,
+    db: Session = Depends(get_db),
+):
+    tarefa = buscar_tarefa_ou_erro(tarefa_id, db)
+    tag = buscar_tag_ou_erro(tag_id, db)
+
+    if tag not in tarefa.tags:
+        tarefa.tags.append(tag)
+        db.commit()
+
+    return buscar_tarefa_ou_erro(tarefa_id, db)
+
+
+@router.delete("/{tarefa_id}/tags/{tag_id}", response_model=schemas.TarefaResponse)
+def remover_tag_da_tarefa(
+    tarefa_id: int,
+    tag_id: int,
+    db: Session = Depends(get_db),
+):
+    tarefa = buscar_tarefa_ou_erro(tarefa_id, db)
+    tag = buscar_tag_ou_erro(tag_id, db)
+
+    if tag not in tarefa.tags:
+        raise HTTPException(status_code=404, detail="Tag nao esta vinculada a tarefa")
+
+    tarefa.tags.remove(tag)
+    db.commit()
+
+    return buscar_tarefa_ou_erro(tarefa_id, db)

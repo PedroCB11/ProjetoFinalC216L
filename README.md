@@ -77,6 +77,8 @@ Tarefas:
 - `POST /tarefas/`
 - `PUT /tarefas/{tarefa_id}`
 - `DELETE /tarefas/{tarefa_id}`
+- `POST /tarefas/{tarefa_id}/tags/{tag_id}`
+- `DELETE /tarefas/{tarefa_id}/tags/{tag_id}`
 
 ## Como executar
 
