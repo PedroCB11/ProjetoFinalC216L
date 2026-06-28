@@ -95,6 +95,12 @@ Servicos planejados:
 - Documentacao da API: http://localhost:8000/docs
 - PostgreSQL: localhost:5432
 
+## Telas do frontend
+
+- `/tarefas`: cadastro, listagem, conclusao, exclusao e associacao de tags em tarefas.
+- `/categorias`: cadastro, listagem e exclusao de categorias.
+- `/tags`: cadastro, listagem e exclusao de tags.
+
 ## Como executar os testes
 
 Execute:

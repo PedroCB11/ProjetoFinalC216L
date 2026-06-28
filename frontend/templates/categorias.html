@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Categorias | Gerenciador de Estudos{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Organizacao</p>
+      <h1>Categorias</h1>
+    </div>
+  </section>
+
+  <section class="layout">
+    <form class="panel" action="{{ url_for('criar_categoria') }}" method="post">
+      <h2>Nova categoria</h2>
+      <label>
+        Nome
+        <input name="nome" required>
+      </label>
+      <label>
+        Descricao
+        <textarea name="descricao" rows="4"></textarea>
+      </label>
+      <button type="submit">Salvar categoria</button>
+    </form>
+
+    <section class="list">
+      {% for categoria in categorias %}
+        <article class="item">
+          <div>
+            <h2>{{ categoria.nome }}</h2>
+            <p>{{ categoria.descricao or "Sem descricao" }}</p>
+          </div>
+          <form action="{{ url_for('excluir_categoria', categoria_id=categoria.id) }}" method="post">
+            <button class="danger" type="submit">Excluir</button>
+          </form>
+        </article>
+      {% else %}
+        <article class="empty">Nenhuma categoria cadastrada.</article>
+      {% endfor %}
+    </section>
+  </section>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Tags | Gerenciador de Estudos{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Marcadores</p>
+      <h1>Tags</h1>
+    </div>
+  </section>
+
+  <section class="layout">
+    <form class="panel" action="{{ url_for('criar_tag') }}" method="post">
+      <h2>Nova tag</h2>
+      <label>
+        Nome
+        <input name="nome" required>
+      </label>
+      <button type="submit">Salvar tag</button>
+    </form>
+
+    <section class="list compact">
+      {% for tag in tags %}
+        <article class="item">
+          <h2>{{ tag.nome }}</h2>
+          <form action="{{ url_for('excluir_tag', tag_id=tag.id) }}" method="post">
+            <button class="danger" type="submit">Excluir</button>
+          </form>
+        </article>
+      {% else %}
+        <article class="empty">Nenhuma tag cadastrada.</article>
+      {% endfor %}
+    </section>
+  </section>
+{% endblock %}

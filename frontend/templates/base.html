@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Gerenciador de Estudos{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="{{ url_for('tarefas') }}">Estudos</a>
+      <nav class="nav">
+        <a href="{{ url_for('tarefas') }}">Tarefas</a>
+        <a href="{{ url_for('categorias') }}">Categorias</a>
+        <a href="{{ url_for('tags') }}">Tags</a>
+      </nav>
+    </header>
+
+    <main class="page">
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
