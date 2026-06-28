@@ -52,6 +52,24 @@ Relacoes:
 - Uma categoria possui varias tarefas (`1:N`).
 - Uma tarefa pode possuir varias tags e uma tag pode estar em varias tarefas (`N:M`).
 
+## Rotas implementadas
+
+Categorias:
+
+- `GET /categorias/`
+- `GET /categorias/{categoria_id}`
+- `POST /categorias/`
+- `PUT /categorias/{categoria_id}`
+- `DELETE /categorias/{categoria_id}`
+
+Tags:
+
+- `GET /tags/`
+- `GET /tags/{tag_id}`
+- `POST /tags/`
+- `PUT /tags/{tag_id}`
+- `DELETE /tags/{tag_id}`
+
 ## Como executar
 
 Com Docker instalado, execute:

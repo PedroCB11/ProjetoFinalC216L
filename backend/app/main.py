@@ -4,8 +4,11 @@ from sqlalchemy.orm import Session
 
 from app import models
 from app.database import Base, engine, get_db
+from app.routers import categorias, tags
 
 app = FastAPI(title="Gerenciador de Tarefas de Estudos")
+app.include_router(categorias.router)
+app.include_router(tags.router)
 
 
 @app.on_event("startup")
