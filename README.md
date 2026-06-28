@@ -70,6 +70,14 @@ Tags:
 - `PUT /tags/{tag_id}`
 - `DELETE /tags/{tag_id}`
 
+Tarefas:
+
+- `GET /tarefas/`
+- `GET /tarefas/{tarefa_id}`
+- `POST /tarefas/`
+- `PUT /tarefas/{tarefa_id}`
+- `DELETE /tarefas/{tarefa_id}`
+
 ## Como executar
 
 Com Docker instalado, execute:

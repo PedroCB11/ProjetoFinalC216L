@@ -37,3 +37,29 @@ class TagResponse(TagBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class TarefaBase(BaseModel):
+    titulo: str
+    descricao: str | None = None
+    concluida: bool = False
+    categoria_id: int
+
+
+class TarefaCreate(TarefaBase):
+    pass
+
+
+class TarefaUpdate(BaseModel):
+    titulo: str | None = None
+    descricao: str | None = None
+    concluida: bool | None = None
+    categoria_id: int | None = None
+
+
+class TarefaResponse(TarefaBase):
+    id: int
+    categoria: CategoriaResponse
+    tags: list[TagResponse] = []
+
+    model_config = ConfigDict(from_attributes=True)
