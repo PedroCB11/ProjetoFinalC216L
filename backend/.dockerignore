@@ -1,0 +1,12 @@
+__pycache__
+**/__pycache__
+*.pyc
+**/*.pyc
+*.pyo
+**/*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+tests/

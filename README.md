@@ -1,58 +1,60 @@
 # Gerenciador de Tarefas de Estudos
 
-Projeto final da disciplina C216. A proposta e construir uma aplicacao web simples para organizar tarefas de estudo por categorias e tags.
+Projeto final da disciplina C216. A aplicacao organiza tarefas de estudo por categorias e tags, com backend REST, frontend web, persistencia em PostgreSQL e execucao via Docker Compose.
 
-## Tema
+## Funcionalidades
 
-O sistema permite cadastrar tarefas de estudo, organizar cada tarefa em uma categoria e associar tags para facilitar filtros e acompanhamento.
+- Cadastro, listagem, conclusao e exclusao de tarefas.
+- Cadastro, listagem e exclusao de categorias.
+- Cadastro, listagem e exclusao de tags.
+- Associacao e remocao de tags em tarefas.
+- Consulta das tarefas com categoria e tags vinculadas.
 
-## Tecnologias planejadas
+## Tecnologias
 
 - Backend: FastAPI
-- Testes: Pytest
-- Frontend: Flask
+- ORM: SQLAlchemy
 - Banco de dados: PostgreSQL
-- Orquestracao: Docker Compose
+- Frontend: Flask + HTML + CSS
+- Testes: Pytest
+- Containers: Docker e Docker Compose
 
-## Estrutura inicial
+## Como executar com Docker
 
-```text
-.
-|-- backend/
-|   |-- app/
-|   |   |-- database.py
-|   |   |-- main.py
-|   |   `-- models.py
-|   |-- Dockerfile
-|   `-- requirements.txt
-|-- database/
-|   `-- schema.sql
-|-- docs/
-|-- frontend/
-|   |-- static/
-|   |-- templates/
-|   |-- Dockerfile
-|   |-- app.py
-|   `-- requirements.txt
-|-- docker-compose.yml
-`-- README.md
+Com o Docker Desktop aberto, execute na raiz do projeto:
+
+```bash
+docker compose up --build
 ```
 
-## Modelo do banco
+Servicos:
 
-Tabelas iniciais:
+- Frontend: http://localhost:5000
+- Backend: http://localhost:8000
+- Documentacao da API: http://localhost:8000/docs
+- PostgreSQL: localhost:5432
 
-- `categorias`: categorias das tarefas de estudo.
-- `tarefas`: tarefas cadastradas pelo usuario.
-- `tags`: marcadores reutilizaveis para classificar tarefas.
-- `tarefa_tags`: tabela associativa da relacao N:M entre tarefas e tags.
+Para acompanhar os logs:
 
-Relacoes:
+```bash
+docker compose logs -f
+```
 
-- Uma categoria possui varias tarefas (`1:N`).
-- Uma tarefa pode possuir varias tags e uma tag pode estar em varias tarefas (`N:M`).
+Para parar os containers:
 
-## Rotas implementadas
+```bash
+docker compose down
+```
+
+Se o Docker Desktop retornar erro de conexao com o engine ou erro 500, reinicie o Docker Desktop e execute o comando novamente. Os arquivos `.dockerignore` removem caches Python do contexto de build para evitar falhas com `__pycache__` no Windows/OneDrive.
+
+## Telas do frontend
+
+- `/tarefas`: cadastro, listagem, conclusao, exclusao e associacao de tags em tarefas.
+- `/categorias`: cadastro, listagem e exclusao de categorias.
+- `/tags`: cadastro, listagem e exclusao de tags.
+
+## Rotas da API
 
 Categorias:
 
@@ -80,30 +82,53 @@ Tarefas:
 - `POST /tarefas/{tarefa_id}/tags/{tag_id}`
 - `DELETE /tarefas/{tarefa_id}/tags/{tag_id}`
 
-## Como executar
+## Modelo do banco
 
-Com Docker instalado, execute:
+Tabelas:
 
-```bash
-docker compose up --build
+- `categorias`: categorias das tarefas de estudo.
+- `tarefas`: tarefas cadastradas pelo usuario.
+- `tags`: marcadores reutilizaveis.
+- `tarefa_tags`: tabela associativa entre tarefas e tags.
+
+Relacoes:
+
+- `categorias` para `tarefas`: relacao `1:N`.
+- `tarefas` para `tags`: relacao `N:M` por meio de `tarefa_tags`.
+
+## Estrutura do projeto
+
+```text
+.
+|-- backend/
+|   |-- app/
+|   |   |-- routers/
+|   |   |-- database.py
+|   |   |-- main.py
+|   |   |-- models.py
+|   |   `-- schemas.py
+|   |-- tests/
+|   |-- .dockerignore
+|   |-- Dockerfile
+|   `-- requirements.txt
+|-- database/
+|   `-- schema.sql
+|-- docs/
+|-- frontend/
+|   |-- static/
+|   |-- templates/
+|   |-- .dockerignore
+|   |-- Dockerfile
+|   |-- app.py
+|   `-- requirements.txt
+|-- docker-compose.yml
+|-- pytest.ini
+`-- README.md
 ```
-
-Servicos planejados:
-
-- Frontend: http://localhost:5000
-- Backend: http://localhost:8000
-- Documentacao da API: http://localhost:8000/docs
-- PostgreSQL: localhost:5432
-
-## Telas do frontend
-
-- `/tarefas`: cadastro, listagem, conclusao, exclusao e associacao de tags em tarefas.
-- `/categorias`: cadastro, listagem e exclusao de categorias.
-- `/tags`: cadastro, listagem e exclusao de tags.
 
 ## Como executar os testes
 
-Execute:
+Execute na raiz do projeto:
 
 ```bash
 pytest
@@ -111,12 +136,58 @@ pytest
 
 Os testes usam SQLite em memoria para validar as rotas principais do backend sem depender do PostgreSQL local.
 
-## Requisitos do projeto
+## Exemplos de uso da API
 
-- Frontend com pelo menos 3 telas
-- Backend com rotas REST usando GET, POST, PUT e DELETE
-- Pelo menos 10 operacoes no backend
-- Banco com relacao 1:N e N:M
-- Testes do backend
-- Aplicacao executando por Docker Compose
-- README com instrucoes e boas praticas de uso
+Criar categoria:
+
+```bash
+curl -X POST http://localhost:8000/categorias/ -H "Content-Type: application/json" -d "{\"nome\":\"Matematica\",\"descricao\":\"Listas e revisoes\"}"
+```
+
+Criar tag:
+
+```bash
+curl -X POST http://localhost:8000/tags/ -H "Content-Type: application/json" -d "{\"nome\":\"prova\"}"
+```
+
+Criar tarefa:
+
+```bash
+curl -X POST http://localhost:8000/tarefas/ -H "Content-Type: application/json" -d "{\"titulo\":\"Revisar funcoes\",\"descricao\":\"Resolver exercicios\",\"concluida\":false,\"categoria_id\":1}"
+```
+
+Associar tag em tarefa:
+
+```bash
+curl -X POST http://localhost:8000/tarefas/1/tags/1
+```
+
+## Boas praticas de uso
+
+- Cadastre categorias antes de criar tarefas.
+- Cadastre tags antes de associa-las a tarefas.
+- Use a documentacao em `/docs` para testar as rotas do backend.
+- Acompanhe `docker compose logs -f` durante a demonstracao para mostrar os logs dos servicos.
+- Pare os containers com `docker compose down` ao finalizar.
+
+## Roteiro sugerido para o video
+
+1. Apresentar a ideia do Gerenciador de Tarefas de Estudos.
+2. Mostrar o projeto rodando com `docker compose up --build`.
+3. Abrir o frontend em `http://localhost:5000`.
+4. Demonstrar as telas de tarefas, categorias e tags.
+5. Abrir `http://localhost:8000/docs` e mostrar as rotas REST.
+6. Mostrar o modelo do banco em `database/schema.sql`.
+7. Exibir os logs com `docker compose logs -f`.
+8. Rodar ou mostrar o resultado de `pytest`.
+
+## Atendimento aos requisitos
+
+- Frontend com pelo menos 3 telas: tarefas, categorias e tags.
+- Backend REST com `GET`, `POST`, `PUT` e `DELETE`.
+- Mais de 10 operacoes no backend.
+- Banco com mais de 2 tabelas.
+- Relacao `1:N`: categorias e tarefas.
+- Relacao `N:M`: tarefas e tags.
+- Testes automatizados com Pytest.
+- Execucao via Docker Compose.
